@@ -1,0 +1,1 @@
+AWS_PROFILE=alex15 ansible-playbook -i hosts ec2.yml -C
