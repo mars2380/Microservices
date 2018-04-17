@@ -1,0 +1,27 @@
+---
+
+#
+# EC2 instances such as micro and small are tightly constrained on memory. 
+# If all memory is taken this can prevent SSH access and the instance may need to be terminated.
+# To give a margin of safety this role enables swap which is disabled by default. 
+# we don't want the swap to be used in normal running of the instance due to the performance impact.
+
+- name: check for existing swap file
+  stat: path=/var/swap.1
+  register: swap_file_exists
+
+- name: Write swapfile for EC2 instance
+  command: /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=4096
+  sudo: yes
+  when: not swap_file_exists.stat.exists
+
+- name: enable swap for EC2 instance
+  command: "{{ item }}"
+  when: not swap_file_exists.stat.exists
+  sudo: yes
+  with_items:
+  - /sbin/mkswap /var/swap.1
+  - /sbin/swapon /var/swap.1
+
+- name: ensure swap still enabled after reboot
+  lineinfile: dest=/etc/fstab line="/var/swap.1 swap swap defaults 0 0"

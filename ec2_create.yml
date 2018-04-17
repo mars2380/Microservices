@@ -1,6 +1,7 @@
 
 - name: Create AWS resources
+  sudo: yes
   hosts: 
     - all
   roles:
-    - ec2
+    - ec2_ubuntu_enableswap

@@ -42,8 +42,8 @@ resource "aws_instance" "EC2" {
 		Name = "Lab15"
 	}
 
-#	provisioner "local-exec" {
-#	  command = "ansible-playbook -i /usr/local/bin/terraform-inventory -u ubuntu playbook.yml --private-key=/home/user/.ssh/aws_user.pem -u ubuntu"
-#	  }
+	provisioner "local-exec" {
+	  command = "ansible-playbook -i hosts ec2_create.yml --private-key=~/ua15.pem -e 'ansible_python_interpreter=/usr/bin/python3'"
+	  }
 }
 
