@@ -1,0 +1,6 @@
+---
+# Variables listed here are applicable to all host groups
+key_name: ua15
+aws_region: eu-west-1
+ami_id: ami-f90a4880
+instance_type: t1.micro

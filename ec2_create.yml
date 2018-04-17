@@ -1,0 +1,6 @@
+
+- name: Create AWS resources
+  hosts: 
+    - all
+  roles:
+    - ec2
