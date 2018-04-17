@@ -1,0 +1,1 @@
+./Terraform/terraform destroy -auto-approve Terraform/
