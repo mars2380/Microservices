@@ -1,1 +1,3 @@
-./Terraform/terraform destroy -auto-approve Terraform/
+terraform init Terraform/
+terraform plan Terraform/
+terraform destroy -auto-approve
