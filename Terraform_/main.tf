@@ -27,6 +27,12 @@ resource "aws_security_group" "default" {
   }
 }
 
+resource "aws_key_pair" "auth" {
+    key_name   = "${var.key_name}"
+    public_key = "${file(var.public_key_path)}"
+  }
+
+
 resource "aws_instance" "EC2" {
 	ami = "ami-f90a4880"
 	instance_type = "t2.micro"
@@ -36,13 +42,13 @@ resource "aws_instance" "EC2" {
     user = "ubuntu"
     }
 	
-	key_name = "ua15"
+	key_name = "${aws_key_pair.auth.id}"
 
 	tags {
 		Name = "Lab15"
 	}
 
-	provisioner "local-exec" {
+  provisioner "local-exec" {
 	  command = "ansible-playbook -i hosts ec2_create.yml --private-key=~/ua15.pem -e 'ansible_python_interpreter=/usr/bin/python3'"
 	  }
 }
