@@ -1,5 +1,6 @@
 # .gitignore file
 .idea/
 terraform
-terraform.*
+terraform.tfstate
+terraform.tfstate.backup
 .terraform/
