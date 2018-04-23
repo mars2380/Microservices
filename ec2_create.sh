@@ -1,7 +1,12 @@
 #!/bin/bash
+function CHECK {
+	export PATH=$PATH:$(pwd)
+	VERSION=$(terraform --version)
+}
+
 function install_linux {
-	CKECK=$(terraform --version)
-	if [ ! -z "$CKECK" ]; then
+	CHECK
+	if [ ! -z "$CHECK" ]; then
 		echo "Terraform is installed"
 		sleep 3
 	else
@@ -9,19 +14,20 @@ function install_linux {
 		wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
 		unzip terraform_0.11.7_linux_amd64.zip
 		rm terraform_*.zip
-		export PATH=$PATH:$(pwd)
+		# export PATH=$PATH:$(pwd)
 	fi
 }
 
 function install_mac {
-	CKECK=$(terraform --version)
-	if [ ! -z "$CKECK" ]; then
+	CHECK
+	if [ ! -z "$VERSION" ]; then
 		echo "Terraform is installed"
 		sleep 3
 	else
 		echo "NO"
-		curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_darwin_amd64.zip -o terraform_0.7_linux_amd64.zip
-		unzip terraform_0.11.7_linux_amd64.zip
+		curl https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_darwin_amd64.zip -o terraform_0.11.7_darwin_amd64.zip
+		unzip terraform_0.11.7_darwin_amd64.zip
+		# export PATH=$PATH:$(pwd)
 		rm terraform_*.zip
 	fi
 }

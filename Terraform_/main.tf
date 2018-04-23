@@ -1,5 +1,5 @@
 resource "aws_security_group" "default" {
-  name        = "terraform_example"
+  name        = "terraform_security_group"
   description = "Used in the terraform"
 
   # SSH access from anywhere
@@ -28,8 +28,8 @@ resource "aws_security_group" "default" {
 }
 
 resource "aws_key_pair" "auth" {
-    key_name   = "${var.key_name}"
-    public_key = "${file(var.public_key_path)}"
+    key_name   = "Terraform_Key"
+    public_key = "${file("~/.ssh/id_rsa.pub")}"
   }
 
 
@@ -42,14 +42,14 @@ resource "aws_instance" "EC2" {
     user = "ubuntu"
     }
 	
-	key_name = "${aws_key_pair.auth.id}"
+	key_name = "Terraform_Key"
 
 	tags {
-		Name = "Lab15"
+		Name = "Rancher"
 	}
 
   provisioner "local-exec" {
-	  command = "ansible-playbook -i hosts ec2_create.yml --private-key=~/ua15.pem -e 'ansible_python_interpreter=/usr/bin/python3'"
+	  command = "ansible-playbook -i hosts ec2_create.yml -e 'ansible_python_interpreter=/usr/bin/python3'"
 	  }
 }
 
