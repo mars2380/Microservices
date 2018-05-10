@@ -3,10 +3,9 @@ function CHECK {
 	export PATH=$PATH:$(pwd)
 	VERSION=$(terraform --version)
 }
-
 function install_linux {
 	CHECK
-	if [ ! -z "$CHECK" ]; then
+	if [ ! -z "$VERSION" ]; then
 		echo "Terraform is installed"
 		sleep 3
 	else
@@ -41,6 +40,6 @@ else
 	echo "No Linux or Apple"
 fi
 
-terraform init Terraform_/
-terraform plan Terraform_/
-terraform apply -auto-approve Terraform_/
+terraform init ec2_rancher/
+terraform plan ec2_rancher/
+terraform apply -auto-approve ec2_rancher/
