@@ -1,0 +1,15 @@
+---
+- name: check if rancher container is running
+  shell: docker ps | grep rancher/server
+  register: server_running
+  ignore_errors: true
+  changed_when: false
+
+- name: remove any previous rancher server (to avoid conflict)
+  docker_container: name={{ server_name }} state=absent
+  when: server_name is defined and
+        server_running is failed
+
+- name: start rancher server
+  command: '{{lookup("template", "server_launch.j2")}}'
+  when: server_running is failed

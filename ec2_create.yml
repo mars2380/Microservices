@@ -6,3 +6,4 @@
   roles:
     - { role: ec2_ubuntu_enableswap, tags: swap }
     - { role: docker, tags: docker }
+    - { role: rancher, tags: rancher }
