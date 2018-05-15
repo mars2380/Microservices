@@ -1,6 +1,6 @@
 ---
 - name: check if rancher container is running
-  shell: docker ps | grep rancher/server
+  shell: docker ps | grep {{ server_name }}
   register: server_running
   ignore_errors: true
   changed_when: false
@@ -11,5 +11,14 @@
         server_running is failed
 
 - name: start rancher server
-  command: '{{lookup("template", "server_launch.j2")}}'
+  docker_container:
+    name: rancher
+    image: "{{ server_name }}"
+    tag: "{{ tag }}"
+    state: started
+    restart_policy: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+  ### shell: docker run -d --restart=unless-stopped -p 80:80 -p 443:443 {{ server_name }}
   when: server_running is failed

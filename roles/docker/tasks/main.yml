@@ -8,6 +8,15 @@
 - name: install docker
   shell: curl https://releases.rancher.com/install-docker/{{ docker_version }}.sh | sh
   when: docker_installed is failed
+  
+- name: Install pip
+  apt:
+    name: python3-pip
+
+- name: Install docker-py
+  pip:
+    name: docker-py
+    state: present
 
 - name: make sure docker is running
   service: name=docker state=started enabled=true
