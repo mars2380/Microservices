@@ -14,7 +14,7 @@
   docker_container:
     name: rancher
     image: "{{ server_name }}"
-    tag: "{{ tag }}"
+    ## tag: "{{ tag }}"
     state: started
     restart_policy: unless-stopped
     ports:
