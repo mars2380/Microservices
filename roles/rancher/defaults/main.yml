@@ -1,4 +1,4 @@
 ---
 
-server_name: rancher/server
-tag: preview
+server_name: rancher/rancher
+## tag: preview

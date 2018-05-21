@@ -97,7 +97,6 @@ resource "aws_key_pair" "auth" {
     public_key = "${file("~/.ssh/id_rsa.pub")}"
   }
 
-
 resource "aws_instance" "EC2" {
 	ami = "ami-f90a4880"
 	instance_type = "t2.micro"
@@ -106,10 +105,15 @@ resource "aws_instance" "EC2" {
 	connection {
     user = "ubuntu"
     }
-	
+
 	key_name = "Terraform_Key"
 
-	tags {
+  root_block_device {
+      volume_type = "gp2"
+      volume_size = 30
+  }
+
+tags {
 		Name = "Rancher"
 	}
 
