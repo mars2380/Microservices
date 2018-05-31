@@ -74,22 +74,24 @@ resource "aws_security_group" "default" {
     protocol    = "tcp"
     self = true
   }
-  # 2379-2380 access from the security ingress {
+    # 2379-2380 access from the security group 
+  ingress {
     from_port   = 2379
     to_port     = 2380
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  # 10250 access from the security group
+    # 10250 access from the security group 
   ingress {
     from_port   = 10250
     to_port     = 10250
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  # 6643 access from the security group ingress {
-    from_port   = 6643
-    to_port     = 6643
+    # 6443 access from the security group 
+  ingress {
+    from_port   = 6443
+    to_port     = 6443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
