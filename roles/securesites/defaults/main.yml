@@ -1,0 +1,16 @@
+---
+# Certbot auto-renew cron job configuration (for certificate renewals).
+certbot_auto_renew: true
+certbot_auto_renew_user: "{{ ansible_user }}"
+certbot_auto_renew_hour: 3
+certbot_auto_renew_minute: 30
+certbot_auto_renew_options: "--quiet --no-self-upgrade"
+
+# Parameters used when creating new Certbot certs.
+certbot_create_method: standalone
+certbot_admin_email: serveradmin@researchresearch.com
+certbot_certs:
+  - domains: "{{ certbot_certs_domains }}"
+certbot_create_command: "letsencrypt certonly --standalone --noninteractive --agree-tos --email {{ certbot_admin_email }} -d {{ cert_item.domains | join(',') }}"
+certbot_create_standalone_stop_services:
+  - apache2

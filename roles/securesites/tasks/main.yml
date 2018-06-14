@@ -1,0 +1,13 @@
+---
+  - name: Install Certbot.
+    package: "name=letsencrypt state=present"
+
+  - include_tasks: create-cert-standalone.yml
+    with_items: "{{ certbot_certs }}"
+    when:
+      - certbot_create_method == 'standalone'
+    loop_control:
+      loop_var: cert_item
+
+  - import_tasks: renew-cron.yml
+    when: certbot_auto_renew

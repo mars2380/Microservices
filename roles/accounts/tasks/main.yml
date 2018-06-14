@@ -1,0 +1,10 @@
+---
+# file: roles/developer_accounts/tasks/main.yml
+
+- name: set up authorized_keys for the admin users to enable remote ssh access
+  authorized_key: user={{ item.key }}
+    key="{{ pubkey | join('\n') }}"
+    path='{{ item.value.path }}/.ssh/authorized_keys'
+    manage_dir=no
+  sudo: true
+  with_dict: "{{ admin_users }}"

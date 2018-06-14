@@ -5,5 +5,7 @@
     - all
   roles:
     - { role: ec2_ubuntu_enableswap, tags: swap }
+    - { role: accounts, tags: accounts }
     - { role: docker, tags: docker }
-#    - { role: rancher, tags: rancher }
+    - { role: rancher, tags: rancher }
+    - { role: securesites, tags: securesites }
