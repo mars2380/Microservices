@@ -26,7 +26,6 @@ tags {
 	}
 
   provisioner "local-exec" {
-	  command = "ansible-playbook -i hosts ec2_create.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=swap,docker"
+	  command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=swap,docker"
 	  }
 }
-
