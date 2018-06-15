@@ -1,4 +1,7 @@
-
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = "${aws_instance.EC2.id}"
+  allocation_id = "${aws_eip.EIP.id}"
+}
 
 resource "aws_key_pair" "auth" {
     key_name   = "Terraform_Key"
@@ -26,6 +29,14 @@ tags {
 	}
 
   provisioner "local-exec" {
-	  command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=swap,docker"
+	  command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=ec2_instance,docker"
 	  }
+}
+
+resource "aws_eip" "EIP" {
+  vpc = true
+}
+
+output "ip" {
+  value = "${aws_eip.EIP.public_ip}"
 }

@@ -5,8 +5,8 @@
     - all
   roles:
     ### try to put more than one role under a tag
-    - { role: ec2_ubuntu_enableswap, tags: swap }
-    - { role: accounts, tags: accounts }
+    - { role: ec2_ubuntu_enableswap, tags: ec2_instance }
+    - { role: accounts, tags: ec2_instance }
     - { role: docker, tags: docker }
     - { role: rancher, tags: rancher }
     - { role: securesites, tags: securesites }
