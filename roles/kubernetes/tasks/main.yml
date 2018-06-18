@@ -1,0 +1,25 @@
+---
+- name: Disable swap
+  command: swapoff -a
+
+- name: Install kubernetes
+  block:
+    - name: 'Add kubernetes repo key'
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+      become: true
+    - name: Add kubernetes repository
+      apt_repository:
+        repo: deb http://apt.kubernetes.io kubernetes-xenial main
+        state: present
+        filename: 'kubernetes'
+      become: true
+    - name: Install kubernetes components
+      apt: 'name={{item}} state=present update_cache=yes'
+      with_items:
+        - kubelet
+        - kubeadm
+        - kubectl
+        - kubernetes-cni
+      become: true

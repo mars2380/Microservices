@@ -42,12 +42,12 @@ resource "aws_security_group" "default" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   
-   # 8080 access from the security group itself
+   # 8080 access from the VPC
   ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    self = true
+    cidr_blocks = ["0.0.0.0/0"]
   } 
 
     # 2376 access from the security group itself
@@ -107,6 +107,18 @@ resource "aws_security_group" "default" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+resource "aws_security_group" "kubernetes" {
+  name        = "kubernetes"
+  description = "Used in the terraform"
+
+  # SSH access from anywhere
+  ingress {
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
