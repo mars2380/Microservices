@@ -6,5 +6,5 @@
     key="{{ pubkey | join('\n') }}"
     path='{{ item.value.path }}/.ssh/authorized_keys'
     manage_dir=no
-  sudo: true
+  become: true
   with_dict: "{{ admin_users }}"

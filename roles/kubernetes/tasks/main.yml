@@ -23,3 +23,25 @@
         - kubectl
         - kubernetes-cni
       become: true
+
+- name: Initialize master - step 1
+  become: true
+  command: "{{ item }}"
+  ignore_errors: True
+  with_items:
+    - kubeadm init
+
+- name: Initialize master - step 2
+  become: true
+  ignore_errors: True
+  command: "{{ item }}"
+  with_items:
+    - mkdir -p $HOME/.kube
+    - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    - chown $(id -u):$(id -g) $HOME/.kube/config
+
+- name: Deploy Dashboard
+  command: kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+  ignore_errors: yes

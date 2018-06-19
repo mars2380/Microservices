@@ -114,10 +114,10 @@ resource "aws_security_group" "kubernetes" {
   name        = "kubernetes"
   description = "Used in the terraform"
 
-  # SSH access from anywhere
+  # Kubernetes-dashboard access from anywhere
   ingress {
-    from_port   = 9090
-    to_port     = 9090
+    from_port   = 30000
+    to_port     = 32767
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

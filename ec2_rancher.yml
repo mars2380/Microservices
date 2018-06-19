@@ -1,12 +1,12 @@
 
 - name: Create AWS resources
-  sudo: yes
+  become: true
   hosts: 
     - all
   roles:
-    - { role: ec2_ubuntu_enableswap, tags: ec2_instance }
-    - { role: accounts, tags: ec2_instance }
-    - { role: docker, tags: docker }
+    - { role: accounts, tags: [ 'ec2_instance', 'kubernetes' ] }
+    - { role: docker, tags: kubernetes }
+    - { role: kubernetes, tags: kubernetes }
+    - { role: ec2_ubuntu_enableswap, tags: rancher }
     - { role: rancher, tags: rancher }
     - { role: securesites, tags: securesites }
-    - { role: kubernetes, tags: kubernetes }
