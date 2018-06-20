@@ -4,9 +4,9 @@
   hosts: 
     - all
   roles:
-    - { role: accounts, tags: [ 'ec2_instance', 'kubernetes' ] }
-    - { role: docker, tags: kubernetes }
+    - { role: accounts, tags: [ 'accounts', 'rancher', 'kubernetes' ] }
+    - { role: docker, tags: [ 'docker', 'kubernetes' ] }
     - { role: kubernetes, tags: kubernetes }
-    - { role: ec2_ubuntu_enableswap, tags: rancher }
+    - { role: enableswap, tags: [ 'enableswap', 'rancher' ] }
     - { role: rancher, tags: rancher }
     - { role: securesites, tags: securesites }
