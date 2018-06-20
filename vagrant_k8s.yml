@@ -1,0 +1,10 @@
+
+- name: Create Vagrat Machine
+  become: true
+  hosts: 
+    - all
+  roles:
+    - { role: accounts, tags: [ 'accounts', 'rancher', 'kubernetes' ] }
+    - { role: docker, tags: [ 'docker', 'kubernetes' ] }
+    - { role: kubernetes, tags: kubernetes }
+    
