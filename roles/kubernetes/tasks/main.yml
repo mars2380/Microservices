@@ -29,7 +29,7 @@
   command: "{{ item }}"
   ignore_errors: True
   with_items:
-    - kubeadm init
+    - kubeadm init --pod-network-cidr=10.244.0.0/16
 
 - name: Initialize master - step 2
   become: true
@@ -40,8 +40,24 @@
     - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     - chown $(id -u):$(id -g) $HOME/.kube/config
 
-- name: Deploy Dashboard
-  command: kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-  environment:
-    KUBECONFIG: /etc/kubernetes/admin.conf
-  ignore_errors: yes
+- lineinfile:
+    dest: /etc/sysctl.d/k8s.conf
+    regexp: '^net.bridge.bridge-nf-call-iptables'
+    line: 'net.bridge.bridge-nf-call-iptables = 1'
+    create: yes
+  notify: sysctl-system
+
+- block:
+    - command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+- name: Master Isolation
+  become: true
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  
+# - name: Deploy Dashboard
+#   command: kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+#   environment:
+#     KUBECONFIG: /etc/kubernetes/admin.conf
+#   ignore_errors: yes
