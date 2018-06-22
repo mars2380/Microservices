@@ -1,0 +1,5 @@
+deploy:
+  provider: script
+  script: bash travis/install.sh
+  on:
+    branch: master
