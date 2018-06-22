@@ -4,6 +4,7 @@
   register: docker_installed
   ignore_errors: true
   changed_when: false
+  no_log: True
 
 - name: install docker
   shell: curl https://releases.rancher.com/install-docker/{{ docker_version }}.sh | sh

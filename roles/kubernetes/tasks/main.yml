@@ -1,20 +1,25 @@
 ---
+- name: determine if kubernetes is installed
+  command: which kubectl
+  register: kubernetes_installed
+  ignore_errors: true
+  changed_when: false
+  no_log: True
+
 - name: Disable swap
   command: swapoff -a
 
 - name: Install kubernetes
   block:
-    - name: 'Add kubernetes repo key'
+    - name: Add kubernetes repo key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         state: present
-      become: true
     - name: Add kubernetes repository
       apt_repository:
         repo: deb http://apt.kubernetes.io kubernetes-xenial main
         state: present
-        filename: 'kubernetes'
-      become: true
+        filename: 'kubernetes'  
     - name: Install kubernetes components
       apt: 'name={{item}} state=present update_cache=yes'
       with_items:
@@ -22,51 +27,62 @@
         - kubeadm
         - kubectl
         - kubernetes-cni
-      become: true
-
-- name: Initialize master - step 1
   become: true
-  command: "{{ item }}"
-  ignore_errors: True
-  with_items:
-    - kubeadm init --pod-network-cidr=10.244.0.0/16
+  when: kubernetes_installed is failed
 
-- name: Initialize master - step 2
+- name: Initialize master
+  block:
+    - name: Init Kubernetes
+      command: "{{ item }}"
+      with_items:
+        - kubeadm init --pod-network-cidr=10.244.0.0/16
+    # - name: Make kubectl work for your non-root user
+    #   command: "{{ item }}"
+    #   with_items:
+    #     - mkdir -p $HOME/.kube
+    #     - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    #     - chown $(id -u):$(id -g) $HOME/.kube/config
+    - name: Change Bridge iptables
+      lineinfile:
+        dest: /etc/sysctl.d/k8s.conf
+        regexp: '^net.bridge.bridge-nf-call-iptables'
+        line: 'net.bridge.bridge-nf-call-iptables = 1'
+        create: yes
+      notify: sysctl-system
+  when: kubernetes_installed is failed
   become: true
   ignore_errors: True
-  command: "{{ item }}"
-  with_items:
-    - mkdir -p $HOME/.kube
-    - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    - chown $(id -u):$(id -g) $HOME/.kube/config
 
-- lineinfile:
-    dest: /etc/sysctl.d/k8s.conf
-    regexp: '^net.bridge.bridge-nf-call-iptables'
-    line: 'net.bridge.bridge-nf-call-iptables = 1'
-    create: yes
-  notify: sysctl-system
-
-- block:
-    - command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
-      environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
+- name: Installing a pod network add-on
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+  when: kubernetes_installed is failed
 
 - name: Master Isolation
   become: true
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   ignore_errors: yes
+  when: kubernetes_installed is failed
 
-- name: Deploy Dashboard
-  command: kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
-  environment:
-    KUBECONFIG: /etc/kubernetes/admin.conf
+- name: Kubernetes Dashboard
+  block:
+    - name: Deploy Dashboard
+      command: kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+    - name: RBAC rules
+      copy: src=dashboard-admin.yaml dest=/root/dashboard-admin.yaml
+    - command: kubectl create -f /root/dashboard-admin.yaml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
   ignore_errors: yes
+  become: true
+  when: kubernetes_installed is failed
 
-- block: 
-  - copy: src=dashboard-admin.yaml dest=/root/dashboard-admin.yaml
-    become: true
-  - command: kubectl create -f dashboard-admin.yaml
-    environment:
-      KUBECONFIG: /etc/kubernetes/admin.conf
-    ignore_errors: yes
+# - name: Exposed dashboard
+#   command: kubectl -n kube-system edit service kubernetes-dashboard | sed -e 's,ClusterIP,NodePort,g'
+#   environment:
+#     KUBECONFIG: /etc/kubernetes/admin.conf
+#   ignore_errors: yes
+  
