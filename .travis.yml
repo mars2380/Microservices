@@ -25,6 +25,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: docker pull ngnix
+  script: docker pull nginx
   on:
     branch: master
