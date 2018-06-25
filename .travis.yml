@@ -1,5 +1,2 @@
-deploy:
-  provider: script
-  # script: bash travis-ci/install.sh
-  on:
-    branch: master
+language : java
+script: mvn test
