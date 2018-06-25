@@ -22,9 +22,9 @@ script:
 #   - cd src
 #   - docker build -t "davecss/vote:latest" -t "davecss/vote:1.0.$TRAVIS_BUILD_NUMBER" .
 
-# deploy:
-#   provider: script
-#   skip_cleanup: true
-#   script: docker push davecss/vote
-#   on:
-#     branch: master
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: docker pull ngnix
+  on:
+    branch: master
