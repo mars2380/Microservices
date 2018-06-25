@@ -11,7 +11,7 @@ services:
 install:
   - echo "do nothing"
 
-before_script:
+# before_script:
   # - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; fi'
 
 script: 
