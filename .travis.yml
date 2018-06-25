@@ -1,2 +1,30 @@
-language : java
-script: mvn test
+sudo: required
+
+language: python
+
+python:
+  - 2.7
+
+services:
+  - docker
+
+install:
+  - echo "do nothing"
+
+before_script:
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; fi'
+
+script: 
+  - echo "do nothing"
+
+# after_success:
+#   - cd $TRAVIS_BUILD_DIR
+#   - cd src
+#   - docker build -t "davecss/vote:latest" -t "davecss/vote:1.0.$TRAVIS_BUILD_NUMBER" .
+
+# deploy:
+#   provider: script
+#   skip_cleanup: true
+#   script: docker push davecss/vote
+#   on:
+#     branch: master
