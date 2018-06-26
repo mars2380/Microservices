@@ -1,0 +1,12 @@
+
+- name: Create AWS resources
+  become: true
+  hosts: 
+    - all
+  roles:
+    - { role: accounts, tags: [ 'accounts', 'rancher', 'kubernetes' ] }
+    - { role: docker, tags: [ 'docker', 'rancher', 'kubernetes' ] }
+#    - { role: kubernetes, tags: kubernetes }
+#    - { role: enableswap, tags: [ 'enableswap', 'rancher' ] }
+    - { role: rancher, tags: rancher }
+#    - { role: securesites, tags: securesites }

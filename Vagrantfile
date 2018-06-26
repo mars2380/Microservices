@@ -45,6 +45,8 @@ Vagrant.configure("2") do |config|
 
     jen.vm.box = "ubuntu/xenial64"
 
+    jen.vm.hostname = "jenkins"
+
     jen.vm.network "public_network", bridge: "eth0"
 
     ### Install Docker and Jenkins ###
@@ -54,5 +56,29 @@ Vagrant.configure("2") do |config|
     jen.vm.provision "shell", inline: "docker run --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home jenkins"
 
     jen.vm.provision "shell", inline: "ip a | grep inet"
+  end
+
+   config.vm.define "rancher" do |rancher|
+
+    rancher.vm.box = "ubuntu/xenial64"
+
+    rancher.vm.hostname = "rancher"
+
+    rancher.vm.network "public_network", bridge: "eth0"
+
+    rancher.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 4096]
+#     v.customize ["modifyvm", :id, "--name", "Rancher"]
+    end
+
+    ### Install Ansible and Rancher ###
+
+    rancher.vm.provision "shell", inline: $ansible_script
+
+    rancher.vm.provision :ansible do |ansible|
+        ansible.playbook = "vagrant_rancher.yml"
+      end
+
+    rancher.vm.provision "shell", inline: "ip a | grep inet"
   end
 end

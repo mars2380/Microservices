@@ -31,7 +31,7 @@ else
 	echo "No Linux or Apple"
 fi
 
-vagrant up
+vagrant up $1
 vagrant box update
-vagrant provision
-vagrant ssh
+vagrant provision $1
+vagrant ssh $1
