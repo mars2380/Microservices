@@ -49,7 +49,7 @@
         line: 'net.bridge.bridge-nf-call-iptables = 1'
         create: yes
       notify: sysctl-system
-  when: kubernetes_installed is failed
+#  when: kubernetes_installed is failed
   become: true
   ignore_errors: True
 
@@ -85,4 +85,3 @@
 #   environment:
 #     KUBECONFIG: /etc/kubernetes/admin.conf
 #   ignore_errors: yes
-  

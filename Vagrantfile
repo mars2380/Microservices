@@ -33,6 +33,11 @@ Vagrant.configure("2") do |config|
 
     k8s.vm.network "public_network", bridge: "eth0"
 
+    k8s.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", 2048]
+#     v.customize ["modifyvm", :id, "--name", "Rancher"]
+    end
+
     ### Install Ansible and deploy playbook ###
 
     k8s.vm.provision "shell", inline: $ansible_script
