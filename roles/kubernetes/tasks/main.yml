@@ -57,13 +57,13 @@
   command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml
   environment:
     KUBECONFIG: /etc/kubernetes/admin.conf
-  when: kubernetes_installed is failed
+  # when: kubernetes_installed is failed
 
 - name: Master Isolation
   become: true
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   ignore_errors: yes
-  when: kubernetes_installed is failed
+  # when: kubernetes_installed is failed
 
 - name: Kubernetes Dashboard
   block:
@@ -78,10 +78,14 @@
         KUBECONFIG: /etc/kubernetes/admin.conf
   ignore_errors: yes
   become: true
-  when: kubernetes_installed is failed
+  # when: kubernetes_installed is failed
 
 # - name: Exposed dashboard
 #   command: kubectl -n kube-system edit service kubernetes-dashboard | sed -e 's,ClusterIP,NodePort,g'
 #   environment:
 #     KUBECONFIG: /etc/kubernetes/admin.conf
 #   ignore_errors: yes
+
+- include: helm.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
