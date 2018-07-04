@@ -29,3 +29,10 @@
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
   when: not helm.stat.exists
+
+  - name: Copy helm install script
+      copy:
+        src: helm.sh
+        dest: /root/helm.sh
+        mode: 0755
+      become: true
