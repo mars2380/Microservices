@@ -156,7 +156,7 @@ Agent:
   # jenkins-agent: v1
 
 Persistence:
-  Enabled: false
+  Enabled: true
   ## A manually managed Persistent Volume and Claim
   ## Requires Persistence.Enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -175,12 +175,14 @@ Persistence:
   AccessMode: ReadWriteOnce
   Size: 8Gi
   volumes:
-  #  - name: nothing
-  #    emptyDir: {}
+#    - name: nothing
+#      emptyDir: {}
   mounts:
   #  - mountPath: /var/nothing
   #    name: nothing
   #    readOnly: true
+    - mountPath: /tmp
+      name: nothing
 
 NetworkPolicy:
   # Enable creation of NetworkPolicy resources.
