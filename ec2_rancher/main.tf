@@ -3,11 +3,11 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = "${aws_eip.EIP.id}"
 }
 
-resource "aws_key_pair" "auth" {
-  key_name   = "Terraform_Key"
-  public_key = "${file("~/.ssh/id_rsa.pub")}"
-
-}
+//resource "aws_key_pair" "auth" {
+//  key_name   = "Terraform_Key"
+//  public_key = "${file("~/.ssh/id_rsa.pub")}"
+//
+//}
 
 resource "aws_eip" "EIP" {
   vpc = true
