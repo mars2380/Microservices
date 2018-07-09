@@ -4,9 +4,10 @@ resource "aws_eip_association" "eip_assoc" {
 }
 
 resource "aws_key_pair" "auth" {
-    key_name   = "Terraform_Key"
-    public_key = "${file("~/.ssh/id_rsa.pub")}"
-  }
+  key_name   = "Terraform_Key"
+  public_key = "${file("~/.ssh/id_rsa.pub")}"
+
+}
 
 resource "aws_eip" "EIP" {
   vpc = true
@@ -24,21 +25,22 @@ resource "aws_instance" "EC2" {
 
   connection {
     user = "ubuntu"
-    }
-
-  key_name = "Terraform_Key"
-
-  root_block_device {
-      volume_type = "gp2"
-      volume_size = 30
   }
 
-tags {
+//  key_name = "Terraform_Key"
+  key_name = "ua10"
+
+
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = 30
+  }
+
+  tags {
     Name = "Rancher"
   }
 
-  provisioner "local-exec" {
-    command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=kubernetes"
-    }
+//  provisioner "local-exec" {
+//    command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=kubernetes"
+//  }
 }
-
