@@ -20,8 +20,7 @@ output "ip" {
 resource "aws_instance" "EC2" {
   ami = "ami-f90a4880"
   instance_type = "t2.micro"
-  vpc_security_group_ids = ["${aws_security_group.default.id}"]
-  vpc_security_group_ids = ["${aws_security_group.kubernetes.id}"]
+  vpc_security_group_ids = ["${aws_security_group.default.id}", "${aws_security_group.kubernetes.id}"]
 
   connection {
     user = "ubuntu"
@@ -40,7 +39,7 @@ resource "aws_instance" "EC2" {
     Name = "Rancher"
   }
 
-//  provisioner "local-exec" {
-//    command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=kubernetes"
-//  }
+  provisioner "local-exec" {
+    command = "ansible-playbook -i hosts ec2_rancher.yml -e 'ansible_python_interpreter=/usr/bin/python3' --tags=kubernetes"
+  }
 }
