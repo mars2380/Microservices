@@ -30,9 +30,9 @@
         KUBECONFIG: /etc/kubernetes/admin.conf
   when: not helm.stat.exists
 
-- name: Copy helm install script
-  copy:
-    src: values.yml
-    dest: /root/values.yml
-    mode: 0644
-  become: true
+#- name: Copy helm install script
+#  copy:
+#    src: values.yml
+#    dest: /root/values.yml
+#    mode: 0644
+#  become: true

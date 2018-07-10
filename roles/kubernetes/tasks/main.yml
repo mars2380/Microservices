@@ -86,6 +86,29 @@
 #     KUBECONFIG: /etc/kubernetes/admin.conf
 #   ignore_errors: yes
 
-- include: helm.yml
-  environment:
-    KUBECONFIG: /etc/kubernetes/admin.conf
+#- include: helm.yml
+#  environment:
+#    KUBECONFIG: /etc/kubernetes/admin.conf
+
+#- name: Copy helm install script
+#  copy:
+#    src: "{{ item }}"
+#    dest: /root/
+#    mode: 0644
+#  become: true
+#  with_fileglob:
+#    - /roles/kebernetes/files/*.yaml
+
+- name: Copy helm install script
+  copy:
+    src: "{{ item }}"
+    dest: /root/
+    mode: 0644
+  become: true
+  with_items:
+      - jenkins-deployment.yaml
+      - Dockerfile
+
+- name: Build Docker Image
+  command: docker build -t adimicoli/my-jenkins-image:1.0 /root/
+  become: true
