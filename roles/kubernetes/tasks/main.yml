@@ -111,5 +111,5 @@
       - Dockerfile
 
 - name: Build Docker Image
-  command: docker build -t adimicoli/my-jenkins-image:1.0 /root/
+  command: docker build -t my-jenkins-image:1.0 /root/
   become: true
