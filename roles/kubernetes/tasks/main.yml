@@ -106,6 +106,7 @@
     mode: 0644
   become: true
   with_items:
+      - jenkins.yml
       - jenkins-deployment.yaml
       - Dockerfile
 
