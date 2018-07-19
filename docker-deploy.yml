@@ -1,0 +1,6 @@
+- name: Deploy Dockers
+  become: true
+  hosts:
+    - all
+  roles:
+    - { role: docker-deploy, tags: [ 'accounts', 'rancher', 'kubernetes' ] }

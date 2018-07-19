@@ -19,6 +19,11 @@
   apt:
     name: python-pip
 
+- name: Install openshift
+  pip:
+    name: openshift
+    state: present
+
 - name: Install docker-py
   pip:
     name: docker-py

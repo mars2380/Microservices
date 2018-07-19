@@ -1,7 +1,7 @@
 
 - name: Create Vagrat Machine
   become: true
-  hosts: 
+  hosts:
     - all
   roles:
     - { role: accounts, tags: [ 'accounts', 'rancher', 'kubernetes' ] }
