@@ -1,3 +1,7 @@
+### TODO
+### Persistent Volume Claims - pending
+### pod has unbound PersistentVolumeClaims - error
+
 kind: PersistentVolume
 apiVersion: v1
 metadata:

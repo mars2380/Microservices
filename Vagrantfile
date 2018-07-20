@@ -60,7 +60,9 @@ Vagrant.configure("2") do |config|
 
     jen.vm.provision "shell", inline: $docker_script
 
-    jen.vm.provision "shell", inline: "docker run --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home jenkins"
+#    jen.vm.provision "shell", inline: "docker run --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home jenkins"
+
+    jen.vm.provision "shell", inline: "if [[ $(sudo docker ps -a | grep myjenkins | awk '{print $NF}') ]]; then sudo docker start myjenkins; else docker run --name myjenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home jenkins; fi"
 
     jen.vm.provision "shell", inline: "ip a | grep inet"
   end
